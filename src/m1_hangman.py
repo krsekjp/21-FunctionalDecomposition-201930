@@ -14,14 +14,32 @@ import random
 
 
 def main():
+    min_length = int(input('What MINIMUM length do you want for the secret word?'))
     word = pick_word()
+    while len(word) < min_length:
+        word = pick_word()
     print(word)
     num_guess = allowed_guesses()
     list_blanks = init_blanks(word)
-    print_blanks_with_letters(list_blanks)
+    #guesses_left = num_guess
 
-    letter = guess()
-    check_ans(word, letter, list_blanks, num_guess)
+    while True:
+        print_blanks_with_letters(list_blanks)
+        letter = guess()
+        blanks2 = change_blanks(word, letter, list_blanks)
+        num_guess = countdown(blanks2, num_guess, letter, word)
+        if num_guess == 0:
+            break
+        if convert_str(blanks2) == word:
+            break
+
+
+    play_again = str(input('Play another game? (y/n)'))
+    if play_again == 'y':
+        main()
+    else:
+        print('Thanks for playing Hangman!')
+
 
 
 def allowed_guesses():
@@ -59,16 +77,34 @@ def print_blanks_with_letters(blanks1):
     print(blank)
 
 
-def check_ans(item1, guess1, blanks2, guesses_left):
-    blanks2copy = blanks2.copy()
+def change_blanks(item1, guess1, blanks2):
     for k in range(len(blanks2)):
         if guess1 == item1[k]:
             blanks2[k] = guess1
-    if blanks2 != blanks2copy:
-        print('Good guess!')
-    else:
-        guesses_left = guesses_left - 1
-        print('Sorry! There are no', guess1, 'letters in the secret word. You have', guesses_left, 'unsuccessful guesses left before you LOSE the game!')
+    return blanks2
+
+
+def convert_str(blanks1):
+    blank = ''
+    for j in range(len(blanks1)):
+        blank = blank + blanks1[j]
+    return blank
+
+
+
+def countdown(blanks2,guesses_left,guess1,item1):
+    for k in range(len(blanks2)):
+        if blanks2[k] == guess1:
+            print('Good guess! You still have', guesses_left, 'unsuccessful guesses left before you LOSE the game!')
+            blanks3 = convert_str(blanks2)
+            if blanks3 == item1:
+                print('You win!')
+            return guesses_left
+    guesses_left = guesses_left - 1
+    print('Sorry! There are no', guess1, 'letters in the secret word. You have', guesses_left, 'unsuccessful guesses left before you LOSE the game!')
+    print()
+    if guesses_left == 0:
+        print('You lose! The secret word was:', item1)
     return guesses_left
 
 
@@ -76,3 +112,4 @@ def check_ans(item1, guess1, blanks2, guesses_left):
 #     if guess == item[i]:
 
 main()
+
