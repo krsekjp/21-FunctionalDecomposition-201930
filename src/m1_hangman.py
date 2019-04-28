@@ -6,7 +6,7 @@ Authors: Josh Krsek and Jacob Murray.
 
 import random
 
-# TODO: 2. Implement Hangman using your Iterative Enhancement Plan.
+# DONE: 2. Implement Hangman using your Iterative Enhancement Plan.
 
 ####### Do NOT attempt this assignment before class! #######
 
